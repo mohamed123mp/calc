@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Calculateur Moyenne - Médecine</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #e3f2fd;
+      color: #0d47a1;
+      padding: 20px;
+      margin: 0;
+    }
+
+    h1, h2 {
+      text-align: center;
+      color: #1565c0;
+    }
+
+    select {
+      display: block;
+      margin: 20px auto;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #90caf9;
+      background-color: #fff;
+    }
+
+    .calculator {
+      display: none; /* Hidden by default */
+      margin-top: 20px;
+    }
+
+    button {
+      background-color: #0d47a1;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+      display: block;
+      margin: 20px auto;
+    }
+
+    button:hover {
+      background-color: #1565c0;
+    }
+
+    #result, #result2, #result4 { /* Added #result4 for Med4 */
+      text-align: center;
+      font-size: 18px;
+      color: green;
+      margin-top: 10px;
+    }
+
+    /* ---------- Med1 Styling ---------- */
+    #med1 .container {
+      max-width: 1000px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.1);
+      overflow-x: auto;
+    }
+
+    #med1 table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    #med1 th, #med1 td {
+      border: 1px solid #bbdefb;
+      padding: 10px 5px;
+      text-align: center;
+      font-size: 14px;
+      min-width: 80px;
+    }
+
+    #med1 th {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    #med1 input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 768px) {
+      #med1 th, #med1 td {
+        font-size: 12px;
+        padding: 6px 2px;
+      }
+
+      #med1 input[type="number"] {
+        width: 50px;
+        font-size: 12px;
+      }
+    }
+
+    /* ---------- Med2 Styling ---------- */
+    #med2 {
+      background: linear-gradient(to bottom, #e3f2fd, #ffffff);
+      padding: 20px;
+    }
+
+    #med2 .container {
+      max-width: 750px;
+      margin: auto;
+    }
+
+    #med2 .unit {
+      margin-bottom: 18px;
+      padding: 15px;
+      border: 1px solid #bbdefb;
+      border-left: 5px solid #1976d2;
+      border-radius: 10px;
+      background-color: #f1f8ff;
+      box-shadow: 2px 2px 5px rgba(0,0,0,0.05);
+    }
+
+    #med2 label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 500;
+      color: #0d47a1;
+    }
+
+    #med2 input {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      border: 1px solid #90caf9;
+      border-radius: 6px;
+      font-size: 15px;
+    }
+
+    #med2 button {
+      width: 100%;
+      font-weight: bold;
+    }
+
+    #med2 #result2 {
+      font-size: 22px;
+      font-weight: bold;
+      color: #1b5e20;
+      margin-top: 25px;
+    }
+
+    /* ---------- Med4 Styling ---------- */
+    #med4 .container {
+      max-width: 800px;
+      margin: auto;
+      background-color: #ffffff;
+      padding: 20px;
+      border-radius: 15px;
+      box-shadow: 0 8px 20px rgba(13, 71, 161, 0.1);
+      overflow-x: auto;
+    }
+
+    #med4 table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 700px;
+    }
+
+    #med4 th, #med4 td {
+      border: 1px solid #bbdefb;
+      padding: 10px 5px;
+      text-align: center;
+      font-size: 14px;
+      min-width: 80px;
+    }
+
+    #med4 th {
+      background-color: #1976d2;
+      color: white;
+    }
+
+    #med4 input[type="number"] {
+      width: 60px;
+      padding: 4px;
+      font-size: 13px;
+      text-align: center;
+    }
+
+    @media screen and (max-width: 768px) {
+      #med4 th, #med4 td {
+        font-size: 12px;
+        padding: 6px 2px;
+      }
+
+      #med4 input[type="number"] {
+        width: 50px;
+        font-size: 12px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Calculateur de Moyenne - Médecine</h1>
+  <h2>Choisissez votre année</h2>
+  <select id="yearSelect" onchange="showCalculator()">
+    <option value="">-- Sélectionner --</option>
+    <option value="med1">1ère année</option>
+    <option value="med2">2ème année</option>
+    <option value="med4">4ème année</option> </select>
+
+  <div id="med1" class="calculator">
+    <div class="container">
+      <h2>Calculateur - 1ère Année Médecine</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Matière</th>
+            <th>Coef</th>
+            <th>EMD</th>
+            <th>EMD2</th>
+            <th>TP1/TD</th>
+            <th>TP2</th>
+            <th>Moyenne</th>
+          </tr>
+        </thead>
+        <tbody id="subjects"></tbody>
+      </table>
+      <button onclick="calculateGeneralAverage()">Calculer la Moyenne Générale</button>
+      <div id="result"></div>
+    </div>
+  </div>
+
+  <div id="med2" class="calculator">
+    <div class="container">
+      <h2>Calculateur - 2ème Année Médecine</h2>
+
+      <div class="unit">
+        <label>UI1: Cardio-respiratoire - Examen</label>
+        <input id="ex1" type="number" step="0.01">
+        <label>UI1: Cardio-respiratoire - TP</label>
+        <input id="tp1" type="number" step="0.01">
+      </div>
+
+      <div class="unit">
+        <label>UI2: Digestif - Examen</label>
+        <input id="ex2" type="number" step="0.01">
+        <label>UI2: Digestif - TP</label>
+        <input id="tp2" type="number" step="0.01">
+      </div>
+
+      <div class="unit">
+        <label>UI3: Urinaire - Examen</label>
+        <input id="ex3" type="number" step="0.01">
+        <label>UI3: Urinaire - TP</label>
+        <input id="tp3" type="number" step="0.01">
+      </div>
+
+      <div class="unit">
+        <label>UI4: Endocrinologie - Examen</label>
+        <input id="ex4" type="number" step="0.01">
+        <label>UI4: Endocrinologie - TP</label>
+        <input id="tp4" type="number" step="0.01">
+      </div>
+
+      <div class="unit">
+        <label>UI5: Système nerveux - Examen</label>
+        <input id="ex5" type="number" step="0.01">
+        <label>UI5: Système nerveux - TP</label>
+        <input id="tp5" type="number" step="0.01">
+      </div>
+
+      <div class="unit">
+        <label>Génétique - Examen</label>
+        <input id="ex6" type="number" step="0.01">
+      </div>
+
+      <div class="unit">
+        <label>Immunologie - Examen</label>
+        <input id="ex7" type="number" step="0.01">
+      </div>
+
+      <button onclick="calculateMed2Average()">Calculer la moyenne</button> <div id="result2"></div>
+    </div>
+  </div>
+
+  <div id="med4" class="calculator">
+    <div class="container">
+      <h2>Calculateur - 4ème Année Médecine</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Module</th>
+            <th>EMD (Évolution)</th>
+            <th>Écos</th>
+            <th>Moyenne </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cardio</td>
+            <td><input type="number" id="cardio_ex" min="0" max="20"></td>
+            <td><input type="number" id="cardio_ecos" min="0" max="20"></td>
+            <td id="cardio_moyenne">-</td>
+          </tr>
+          <tr>
+            <td>Pneumo</td>
+            <td><input type="number" id="pneumo_ex" min="0" max="20"></td>
+            <td><input type="number" id="pneumo_ecos" min="0" max="20"></td>
+            <td id="pneumo_moyenne">-</td>
+          </tr>
+          <tr>
+            <td>Neuro</td>
+            <td><input type="number" id="neuro_ex" min="0" max="20"></td>
+            <td><input type="number" id="neuro_ecos" min="0" max="20"></td>
+            <td id="neuro_moyenne">-</td>
+          </tr>
+          <tr>
+            <td>Hémato</td>
+            <td><input type="number" id="hemato_ex" min="0" max="20"></td>
+            <td><input type="number" id="hemato_ecos" min="0" max="20"></td>
+            <td id="hemato_moyenne">-</td>
+          </tr>
+          <tr>
+            <td>Gastro</td>
+            <td><input type="number" id="gastro_ex" min="0" max="20"></td>
+            <td><input type="number" id="gastro_ecos" min="0" max="20"></td>
+            <td id="gastro_moyenne">-</td>
+          </tr>
+          <tr>
+            <td>Maladies infectieuses</td>
+            <td><input type="number" id="infectieuses_ex" min="0" max="20"></td>
+            <td><input type="number" id="infectieuses_ecos" min="0" max="20"></td>
+            <td id="infectieuses_moyenne">-</td>
+          </tr>
+        </tbody>
+      </table>
+      <button onclick="calculateMed4Average()">Calculer la Moyenne</button> <div id="result4"></div> </div>
+  </div>
+
+  <script>
+    function showCalculator() {
+      // Hide all calculators first
+      document.getElementById("med1").style.display = "none";
+      document.getElementById("med2").style.display = "none";
+      document.getElementById("med4").style.display = "none"; // Hide Med4
+
+      const choice = document.getElementById("yearSelect").value;
+      if (choice) {
+        document.getElementById(choice).style.display = "block";
+      }
+    }
+
+    // --- Med1 Logic ---
+    const subjects = [
+      { nom: "Anatomie", coef: 2, tp: 2, emd2: true },
+      { nom: "Biophysique", coef: 2, tp: 2, emd2: true },
+      { nom: "Chimie", coef: 2, tp: 2, emd2: true },
+      { nom: "Biochimie", coef: 2, tp: 0, emd2: true },
+      { nom: "Cytologie", coef: 2, tp: 1, emd2: true },
+      { nom: "Biostatistique", coef: 2, tp: 1, emd2: true },
+      { nom: "Embryologie", coef: 1, tp: 0, emd2: false },
+      { nom: "Histologie", coef: 1, tp: 0, emd2: false },
+      { nom: "Physiologie", coef: 1, tp: 0, emd2: false },
+      { nom: "SSH", coef: 1, tp: "td", emd2: false }
+    ];
+
+    const tbody = document.getElementById("subjects");
+    subjects.forEach((s, i) => {
+      let emd2 = s.emd2 ? `<input type="number" id="emd2-${i}" min="0" max="20">` : "-";
+      let tp1 = (s.tp === 2 || s.tp === 1) ? `<input type="number" id="tp1-${i}" min="0" max="20">` : (s.tp === "td" ? `<input type="number" id="td-${i}" min="0" max="20">` : "-");
+      let tp2 = (s.tp === 2) ? `<input type="number" id="tp2-${i}" min="0" max="20">` : "-";
+      tbody.innerHTML += `<tr><td>${s.nom}</td><td>${s.coef}</td><td><input type="number" id="emd1-${i}" min="0" max="20"></td><td>${emd2}</td><td>${tp1}</td><td>${tp2}</td><td id="moy-${i}">-</td></tr>`;
+    });
+
+    function calculateGeneralAverage() {
+      let total = 0, coefSum = 0;
+      subjects.forEach((s, i) => {
+        const emd1 = parseFloat(document.getElementById(`emd1-${i}`).value) || 0;
+        let moyenne = 0;
+        if (s.nom === "SSH") {
+          const td = parseFloat(document.getElementById(`td-${i}`).value) || 0;
+          moyenne = (emd1 * 0.6) + (td * 0.4);
+        } else if (s.emd2) {
+          const emd2 = parseFloat(document.getElementById(`emd2-${i}`).value) || 0;
+          if (s.tp === 2) {
+            const tp1 = parseFloat(document.getElementById(`tp1-${i}`).value) || 0;
+            const tp2 = parseFloat(document.getElementById(`tp2-${i}`).value) || 0;
+            moyenne = (((emd1 + emd2) / 2) * 0.8) + (((tp1 + tp2) / 2) * 0.2);
+          } else if (s.tp === 1) {
+            const tp1 = parseFloat(document.getElementById(`tp1-${i}`).value) || 0;
+            moyenne = (((emd1 + emd2) / 2) * 0.8) + (tp1 * 0.2);
+          } else {
+            moyenne = (emd1 + emd2) / 2;
+          }
+        } else {
+          moyenne = emd1;
+        }
+        moyenne = Math.round(moyenne * 100) / 100;
+        document.getElementById(`moy-${i}`).innerText = moyenne;
+        total += moyenne * s.coef;
+        coefSum += s.coef;
+      });
+      const general = Math.round((total / coefSum) * 100) / 100;
+      document.getElementById("result").innerText = `Moyenne Générale : ${general} / 20`;
+    }
+
+    // --- Med2 Logic ---
+    function calculateMed2Average() { // Renamed from calculate()
+      const coeffs = [4, 4, 4, 4, 4, 2, 2];
+      let total = 0, max = 0;
+      for (let i = 1; i <= 5; i++) {
+        let ex = parseFloat(document.getElementById('ex' + i).value) || 0;
+        let tp = parseFloat(document.getElementById('tp' + i).value) || 0;
+        total += (ex * 0.8 + tp * 0.2) * coeffs[i - 1];
+        max += coeffs[i - 1];
+      }
+      for (let i = 6; i <= 7; i++) {
+        let ex = parseFloat(document.getElementById('ex' + i).value) || 0;
+        total += ex * coeffs[i - 1];
+        max += coeffs[i - 1];
+      }
+      let moyenne = total / max;
+      document.getElementById('result2').innerText = `Votre moyenne annuelle est : ${moyenne.toFixed(2)} / 20`;
+    }
+
+    // --- Med4 Logic ---
+    function calculateMed4Average() { // Renamed from calculate()
+      const subjectsMed4 = [
+        { exId: 'cardio_ex', ecosId: 'cardio_ecos', moyId: 'cardio_moyenne' },
+        { exId: 'pneumo_ex', ecosId: 'pneumo_ecos', moyId: 'pneumo_moyenne' },
+        { exId: 'neuro_ex', ecosId: 'neuro_ecos', moyId: 'neuro_moyenne' },
+        { exId: 'hemato_ex', ecosId: 'hemato_ecos', moyId: 'hemato_moyenne' },
+        { exId: 'gastro_ex', ecosId: 'gastro_ecos', moyId: 'gastro_moyenne' },
+        { exId: 'infectieuses_ex', ecosId: 'infectieuses_ecos', moyId: 'infectieuses_moyenne' }
+      ];
+
+      let totalMed4 = 0, coefSumMed4 = 0;
+
+      subjectsMed4.forEach(s => {
+        const ex = parseFloat(document.getElementById(s.exId).value) || 0;
+        const ecos = parseFloat(document.getElementById(s.ecosId).value) || 0;
+
+        // Calculer la moyenne pour كل مادة (70% EMD, 30% Écos)
+        const moyenne = (ex * 0.7 + ecos * 0.3).toFixed(2);
+
+        document.getElementById(s.moyId).innerText = moyenne;
+        totalMed4 += parseFloat(moyenne) * 1;  // يتم تطبيق معامل 1 لكل مادة
+        coefSumMed4 += 1;  // مجموع المعاملات (1 لكل مادة)
+      });
+
+      const generalMed4 = (totalMed4 / coefSumMed4).toFixed(2);
+      document.getElementById("result4").innerText = `Moyenne générale : ${generalMed4} / 20`; // Updated ID
+    }
+  </script>
+</body>
+</html>
